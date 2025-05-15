@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lucky Charm❤️❤️</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #5a2a27;
+      overflow-x: hidden;
+    }
+    
+    .container {
+      width: 100%;
+      max-width: 800px;
+      padding: 20px;
+    }
+    
+    .section {
+      display: none;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      transform: scale(0.95);
+      transition: transform 0.5s ease, opacity 0.5s ease;
+      opacity: 0;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .section::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      right: -10px;
+      bottom: -10px;
+      background: linear-gradient(45deg, #ff9a9e, #fad0c4, #ff9a9e);
+      z-index: -1;
+      border-radius: 30px;
+      animation: gradientBG 15s ease infinite;
+      background-size: 400% 400%;
+    }
+    
+    .section.active {
+      display: block;
+      transform: scale(1);
+      opacity: 1;
+      animation: fadeIn 0.8s ease forwards;
+    }
+    
+    h1 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: #d23669;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 25px;
+    }
+    
+    .btn {
+      background: linear-gradient(to right, #ff758c, #ff7eb3);
+      border: none;
+      color: white;
+      padding: 12px 25px;
+      border-radius: 50px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(255, 117, 140, 0.4);
+      margin: 10px 5px;
+      font-weight: 600;
+    }
+    
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 7px 20px rgba(255, 117, 140, 0.6);
+    }
+    
+    .btn:active {
+      transform: translateY(1px);
+    }
+    
+    .heart {
+      color: #ff4757;
+      font-size: 1.5rem;
+      animation: pulse 1.5s infinite;
+      display: inline-block;
+    }
+    
+    .photo-gallery {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin: 30px 0;
+    }
+    
+    .photo-card {
+      width: 150px;
+      height: 150px;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .photo-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    }
+    
+    .photo-card img {
+      width: 70%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .photo-card:hover img {
+      transform: scale(1.1);
+    }
+    
+    .photo-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      padding: 10px;
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+      font-size: 0.9rem;
+    }
+    
+    .photo-card:hover .photo-caption {
+      transform: translateY(0);
+    }
+    
+    .love-letter {
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      position: relative;
+      margin: 30px 0;
+      text-align: left;
+      font-style: italic;
+      border-left: 5px solid #ff758c;
+    }
+    
+    .love-letter::before {
+      content: '""';
+      font-size: 4rem;
+      color: rgba(255, 117, 140, 0.2);
+      position: absolute;
+      top: -10px;
+      left: 10px;
+      font-family: serif;
+    }
+    
+    .memory-game {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin: 30px 0;
+    }
+    
+    .memory-card {
+      height: 80px;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      border-radius: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .memory-card:hover {
+      transform: scale(1.03);
+    }
+    
+    .memory-card.flipped {
+      background: white;
+      transform: rotateY(180deg);
+    }
+    
+    .final-surprise {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .final-surprise::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('https://media.giphy.com/media/XbxZ41fWLeRECPsGIJ/giphy.gif') center/cover;
+      opacity: 0.1;
+      z-index: -1;
+    }
+    
+    .birthday-cake {
+      width: 200px;
+      height: 200px;
+      margin: 20px auto;
+      background: url('https://media.giphy.com/media/3orieSq1m1h5wQxWj6/giphy.gif') center/contain no-repeat;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.3); }
+      100% { transform: scale(1); }
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      .memory-game {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      
+      .photo-card {
+        width: 120px;
+        height: 120px;
+      }
+    }
+    
+    /* Floating hearts animation */
+    .floating-hearts {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1000;
+    }
+    
+    .heart {
+      position: absolute;
+      opacity: 0;
+      animation: float-up 4s linear forwards;
+    }
+    
+    @keyframes float-up {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+    
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: #ff758c;
+      border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: #ff4757;
+    }
+    
+    /* Music player */
+    .music-player {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: white;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      z-index: 100;
+    }
+    
+    .music-icon {
+      font-size: 1.5rem;
+      color: #ff758c;
+    }
+  </style>
+</head>
+<body style="background-image: url('image/img2.jpg'); background-size: contain; background-position: center;">
+  <div class="floating-hearts" id="hearts-container"></div>
+  
+  <div class="music-player" id="music-toggle">
+    <div class="music-icon">🎵</div>
+  </div>
+      
+  
+  <!-- Add controls temporarily for debugging -->
+  <audio id="bg-music" loop>
+    <source src="https://res.cloudinary.com/dar6gpo7x/video/upload/v1747298762/song_trcqah.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
+  </audio>
+
+
+  <div class="container">
+    <!-- Welcome Section -->
+    <section id="welcome" class="section active">
+      <h1>Happy Birthday, CutiePie❤️ <span class="heart">❤️</span></h1>
+      <p>I've prepared something special just for you...</p>
+      <p>Are you ready to begin this magical journey?</p>
+      <button class="btn" onclick="showSection('love-letter')">Begin the Magic ✨</button>
+    </section>
+    
+    <!-- Love Letter Section -->
+    <section id="love-letter" class="section">
+      <h1>Dearest Bestie <span class="heart">❤️</span></h1>
+      <div class="love-letter">
+        <p>Happy Birthday to my favorite friend! 🎉 Life is brighter with you in it—thank you for the laughter...</p>
+        <p>The memories, and the kind of friendship that feels like home... </p>
+        <p>May your day sparkle as much as you do! ✨ Love you always!"</p>
+        <p>Happy Birthday to the most beautiful girl in my world.</p>
+        <p>❤️ Your Forever,</p>
+        <p style="font-weight: bold; margin-top: 10px;">Best Friend ❤️</p>
+      </div>
+      <button class="btn" onclick="showSection('memories')">Memories 💞</button>
+    </section>
+    
+    <!-- Memories Section -->
+    <section id="memories" class="section">
+      <h1>Memories ("Golden Hour") <span class="heart">❤️</span></h1>
+      <!-- <p>Every moment with you becomes a treasure I hold dear...</p> -->
+      
+      <div class="photo-gallery">
+        <div class="photo-card">
+          <img src="image/img1.jpg" alt="Memory 1">
+          <div class="photo-caption">Breathtaking😍</div>
+        </div>
+        <div class="photo-card">
+          <img src="image/img3.jpg" alt="Memory 2">
+          <div class="photo-caption">Charming🤗</div>
+        </div>
+        <div class="photo-card">
+          <img src="image/img10.jpg" alt="Memory 3">
+          <div class="photo-caption">Stunning💙</div>
+        </div>
+        <div class="photo-card">
+          <img src="image/img13.png" alt="Memory 4">
+          <div class="photo-caption">Unbreakable🥰</div>
+        </div>
+        <div class="photo-card">
+          <img src="image/img14.jpg" alt="Memory 4">
+          <div class="photo-caption">CutiePie🤩</div>
+        </div>
+        <div class="photo-card">
+          <img src="image/img8.jpeg" alt="Memory 4">
+          <div class="photo-caption">Sunshine💚</div>
+        </div>
+        <div class="photo-card">
+          <img src="image/img12.jpeg" alt="Memory 4">
+          <div class="photo-caption">God's Treasure🤍</div>
+        </div>
+        <div class="photo-card">
+          <img src="image/img9.jpg" alt="Memory 4">
+          <div class="photo-caption">Evergreen😘</div>
+        </div>
+      </div>
+      
+      <button class="btn" onclick="showSection('game')">Play With Me 🎮</button>
+    </section>
+    
+    <!-- Memory Game Section -->
+    <section id="game" class="section">
+      <h1>The Memory Treasure Hunt <span class="heart">❤️</span></h1>
+      <p>Match the pairs to reveal special moments from your journey!</p>
+      
+      <div class="memory-game" id="memory-game">
+        <!-- Cards will be generated by JavaScript -->
+      </div>
+      
+      <div id="game-message" style="margin: 20px 0; font-weight: bold; min-height: 24px;"></div>
+      
+      <button class="btn" onclick="showSection('final-surprise')" id="next-btn" style="display: none;">Final Surprise 🎁</button>
+    </section>
+    
+    <!-- Final Surprise Section -->
+<section id="final-surprise" class="section final-surprise">
+  <h1>Happy Birthday, My BFF! <span class="heart">❤️</span></h1>
+  <!-- <div class="birthday-cake">
+    
+  </div> -->
+  <p>May this year bring you as much happiness as you've brought into my life.</p>
+  <p>You deserve all the love, joy, and beautiful moments in the world.</p>
+  <p>Thank You for being my Best Friend ☺️☺️</p>
+  
+  <button class="btn" onclick="handleSurpriseClick()">Surprise 💖</button>
+  <!-- <button class="btn" onclick="showSection('welcome')">Start Over 🔄</button> -->
+</section>
+</div>
+
+<script>
+  // Counter for surprise button clicks
+  let surpriseClickCount = 0;
+  
+  // Handle surprise button click
+  function handleSurpriseClick() {
+    createHearts();
+    launchConfetti();
+    
+    surpriseClickCount++;
+    
+    if (surpriseClickCount >= 5) {
+      // Redirect to home page after 5 clicks
+      showSection('welcome');
+      surpriseClickCount = 0; // Reset counter
+    }
+  }
+  
+  // Show section function
+  function showSection(sectionId) {
+    document.querySelectorAll('.section').forEach(section => {
+      section.classList.remove('active');
+    });
+    document.getElementById(sectionId).classList.add('active');
+    window.scrollTo(0, 0);
+    
+    // Special initialization for memory game
+    if (sectionId === 'game') {
+      initializeMemoryGame();
+    }
+  }
+  
+  // Create floating hearts
+  function createHearts() {
+    const heartsContainer = document.getElementById('hearts-container');
+    heartsContainer.innerHTML = '';
+    
+    for (let i = 0; i < 50; i++) {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.innerHTML = '❤️';
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+      heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+      heart.style.animationDelay = Math.random() * 2 + 's';
+      heartsContainer.appendChild(heart);
+    }
+  }
+  
+  // Launch confetti
+  function launchConfetti() {
+    confetti({
+      particleCount: 150,
+      spread: 70,
+      origin: { y: 0.6 }
+    });
+    
+    // Additional confetti bursts
+    setTimeout(() => {
+      confetti({
+        particleCount: 100,
+        angle: 60,
+        spread: 55,
+        origin: { x: 0 }
+      });
+      confetti({
+        particleCount: 100,
+        angle: 120,
+        spread: 55,
+        origin: { x: 1 }
+      });
+    }, 300);
+  }
+  
+  // Music toggle
+  const musicToggle = document.getElementById('music-toggle');
+  const bgMusic = document.getElementById('bg-music');
+  let musicPlaying = false;
+  
+  musicToggle.addEventListener('click', () => {
+    if (musicPlaying) {
+      bgMusic.pause();
+      musicToggle.innerHTML = '<div class="music-icon">🎵</div>';
+    } else {
+      bgMusic.play();
+      musicToggle.innerHTML = '<div class="music-icon">🔊</div>';
+    }
+    musicPlaying = !musicPlaying;
+  });
+  
+  // Memory game logic
+  function initializeMemoryGame() {
+    const memoryGame = document.getElementById('memory-game');
+    memoryGame.innerHTML = '';
+    
+    const emojiPairs = ['❤️', '🎂', '🎁', '🌹', '💌', '💍'];
+    const emojis = [...emojiPairs, ...emojiPairs];
+    
+    // Shuffle emojis
+    for (let i = emojis.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [emojis[i], emojis[j]] = [emojis[j], emojis[i]];
+    }
+    
+    let flippedCards = [];
+    let matchedPairs = 0;
+    let canFlip = true;
+    
+    emojis.forEach((emoji, index) => {
+      const card = document.createElement('div');
+      card.classList.add('memory-card');
+      card.dataset.index = index;
+      card.dataset.value = emoji;
+      card.addEventListener('click', flipCard);
+      memoryGame.appendChild(card);
+    });
+    
+    function flipCard() {
+      if (!canFlip || this.classList.contains('flipped') || flippedCards.length >= 2) return;
+      
+      this.classList.add('flipped');
+      this.textContent = this.dataset.value;
+      flippedCards.push(this);
+      
+      if (flippedCards.length === 2) {
+        canFlip = false;
+        checkForMatch();
+      }
+    }
+    
+    function checkForMatch() {
+      const [card1, card2] = flippedCards;
+      
+      if (card1.dataset.value === card2.dataset.value) {
+        // Match found
+        matchedPairs++;
+        flippedCards = [];
+        canFlip = true;
+        
+        if (matchedPairs === emojiPairs.length) {
+          document.getElementById('game-message').textContent = 'You remembered all your beautiful moments!';
+          document.getElementById('next-btn').style.display = 'inline-block';
+          launchConfetti();
+        }
+      } else {
+        // No match
+        setTimeout(() => {
+          card1.classList.remove('flipped');
+          card2.classList.remove('flipped');
+          card1.textContent = '';
+          card2.textContent = '';
+          flippedCards = [];
+          canFlip = true;
+        }, 1000);
+      }
+    }
+  }
+  
+  // Start with some hearts
+  window.addEventListener('load', () => {
+    createHearts();
+    
+    // Enable music after user interaction
+    document.body.addEventListener('click', function enableMusic() {
+      bgMusic.volume = 0.3;
+      bgMusic.play().then(() => {
+        musicPlaying = true;
+        musicToggle.innerHTML = '<div class="music-icon">🔊</div>';
+      }).catch(e => console.log('Autoplay prevented:', e));
+      document.body.removeEventListener('click', enableMusic);
+    });
+  });
+</script>
+</body>
+</html>
